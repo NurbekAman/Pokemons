@@ -1,10 +1,9 @@
 define(['knockout', 'utils', 'ojs/ojarraydataprovider', 'ojs/ojchart', 'ojs/ojknockout'],
   function(ko, utils, ArrayDataProvider) {
     function PieViewModel(data) {
-      const self = this;
       const { types } = data;
 
-      self.dataProvider = ko.computed(() => {
+      this.dataProvider = ko.computed(() => {
         const pokemonTypes =  utils.getPokemonTypesCount(types);
 
         const pieData = pokemonTypes.map(({ name, count }, index) => ({

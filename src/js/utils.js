@@ -1,5 +1,5 @@
-define([], function() {
-  self.getPokemonTypesCount = function(types) {
+define(function() {
+  const getPokemonTypesCount = (types) => {
     const countType = [];
 
     function calcCount(typeList) {
@@ -28,5 +28,33 @@ define([], function() {
     return countType;
   }
 
-  return { getPokemonTypesCount: getPokemonTypesCount };
+  const convertTypesToString = (types) => types.reduce((acc, { type: { name } }, index) => {
+    if (index === types. length - 1) {
+      return acc + name;
+    }
+
+    return acc + name + ', '
+  }, '')
+
+  const getTableData = (pokemons) => {
+    return pokemons.map((pokemon) => {
+      const { id, name, weight, height, moves, types } = pokemon;
+
+      return {
+        isChecked: false,
+        id,
+        name,
+        height,
+        weight,
+        numberOfMoves: moves.length ? moves.length : 0,
+        types: types.length ?  convertTypesToString(types) : '',
+      };
+    })
+  }
+
+
+  return {
+    getPokemonTypesCount,
+    getTableData,
+  };
 });

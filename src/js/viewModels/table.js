@@ -1,27 +1,3 @@
-const filterPokemonData = (pokemons) => {
-  const getTypesInString = (types) => types.reduce((acc, { type: { name } }, index) => {
-    if (index === types. length - 1) {
-      return acc + name;
-    }
-
-    return acc + name + ', '
-  }, '')
-
-  return pokemons.map((pokemon) => {
-    const { id, name, weight, height, moves, types } = pokemon;
-
-    return {
-      isChecked: false,
-      id,
-      name,
-      height,
-      weight,
-      numberOfMoves: moves.length ? moves.length : 0,
-      types: types.length ?  getTypesInString(types) : '',
-    };
-  })
-}
-
 const COLUMNS = [
   { headerText: 'Enabled', field: 'isChecked', id: 'column1', template: 'checkTemplate', headerTemplate: 'checkTemplateHeader' },
   { headerText: 'id', field: 'id' },
@@ -33,62 +9,51 @@ const COLUMNS = [
   { headerText: 'Actions', field: 'id', template: 'viewButtonTemplate', id: 'column8' }
 ];
 
-define(['knockout', 'ojs/ojarraydataprovider', 'ojs/ojknockout-keyset', 'ojs/ojmodule-element-utils', 'ojs/ojtable', 'ojs/ojcheckboxset', 'ojs/ojoption'],
-function(ko, ArrayDataProvider, keySet, moduleUtils) {
+define(['knockout', 'ojs/ojarraydataprovider', 'ojs/ojknockout-keyset', 'ojs/ojmodule-element-utils', 'utils', 'ojs/ojtable', 'ojs/ojcheckboxset', 'ojs/ojoption', 'ojs/ojknockout', 'ojs/ojprogress'],
+function(ko, ArrayDataProvider, keySet, moduleUtils, utils) {
   function TableViewModel(data) {
-    const self = this;
     const { pokemonList, selectPokemonId } = data;
-    // table
-    self.columns = ko.observable([]);
-    self.dataProvider = ko.observable();
-    self.selectedPokemons = new keySet.ObservableKeySet();
-    self.headerCheckedStatus = ko.observable([]);
-    self.columns(COLUMNS);
-    self.dataProvider = ko.computed(() => {
-      const pokemonsData = filterPokemonData(pokemonList);
-      return new ArrayDataProvider(pokemonsData, { keyAttributes: 'id' });
+    this.columns = ko.observable(COLUMNS);
+    this.dataProvider = ko.observable();
+    this.selectedPokemons = new keySet.ObservableKeySet();
+    this.headerCheckedStatus = ko.observable([]);
+
+    this.dataProvider = ko.computed(() => {
+      return new ArrayDataProvider(utils.getTableData(pokemonList), { keyAttributes: 'id' });
     });
 
-    self.onChangeCheckbox = (event) => {
-      const { detail } = event;
+    this.onChangeCheckbox = ({ detail }) => {
       const { value, previousValue } = detail;
       const id = value[0];
       const previousId = previousValue[0];
 
-      if (!id && self.selectedPokemons().has(previousId)) {
-        self.selectedPokemons.delete([previousId]);
+      if (id) {
+        this.selectedPokemons.add([id]);
+      } else {
+        this.selectedPokemons.delete([previousId]);
       }
+    };
 
-      if (id && !self.selectedPokemons().has(id)) {
-        self.selectedPokemons.add([id]);
-      }
-
-    }
-
-    self.handleCheckbox = (id) => {
-      const a = self.selectedPokemons();
-      const isChecked = self.selectedPokemons().has(id);
+    this.handleCheckbox = (id) => {
+      const isChecked = this.selectedPokemons().has(id);
       return isChecked ? [id] : [];
-    }
+    };
 
-    self.onChangeCheckboxHeader = (event) => {
+    this.onChangeCheckboxHeader = (event) => {
       const { detail: { value } } = event;
 
       if (value.length) {
-        self.selectedPokemons.addAll();
+        pokemonList.forEach(({ id }) => this.selectedPokemons.add([id]));
       } else {
-        self.selectedPokemons.clear();
+        this.selectedPokemons.clear();
       }
-    }
+    };
 
-    self.buttonClick = (event) => {
-      const { target: { id } } = event;
-      selectPokemonId(id);
-    }
+    this.buttonClick = ({ target: { id } }) => selectPokemonId(id);
 
-    self.moduleConfig = ko.computed(() => {
-      const selectedList = [...self.selectedPokemons().values()];
-      const pieData = selectedList.reduce((acc, selectedId) => {
+    this.moduleConfig = ko.computed(() => {
+      const set = this.selectedPokemons().values();
+      const pieData = [...set].reduce((acc, selectedId) => {
         const pokemon = pokemonList.find(({ id }) => selectedId === id );
 
         if (pokemon) {

@@ -7,7 +7,7 @@
 /*
  * Your application specific code will go here
  */
-define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element'],
+define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element', 'ojs/ojmoduleanimations', 'ojs/ojprogress'],
   function(ResponsiveUtils, ResponsiveKnockoutUtils, ko, moduleUtils, api) {
      function ControllerViewModel() {
        var self = this;
@@ -26,25 +26,42 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
       self.showTable = ko.observable(true);
       self.pokemonList = ko.observable([]);
       self.backToTable = ko.observable(false);
+      self.loading = ko.observable(false);
 
       (async () => {
         try {
-          console.log('here')
+          self.loading(true);
           const pokemons = await api.getPokemons();
-          console.log(pokemons);
+          self.loading(false);
           self.pokemonList(pokemons);
         } catch (err) {
 
         }
       })();
 
+      this.oldViewEffect = (oldView) => {
+        return oj.AnimationUtils.fadeOut(oldView, {duration:'500ms', persist: 'all'});
+      };
+
+      this.newViewEffect = (newView) => {
+        return oj.AnimationUtils.fadeIn(newView, {duration:'500ms', persist: 'all'});
+      }
+
+      this.customAnimation = ko.pureComputed(() => {
+        return oj.ModuleAnimations.createAnimation(this.oldViewEffect, this.newViewEffect, false);
+      });
+
       self.moduleConfig = ko.computed(() => {
+        console.log(self.loading())
         if (self.showTable()) {
-          return moduleUtils.createConfig({ name: 'table', params: { pokemonList: self.pokemonList(), selectPokemonId: self.selectedPokemonId } });
+          return moduleUtils.createConfig({ name: 'table', params: {
+            pokemonList: self.pokemonList(),
+            selectPokemonId: self.selectedPokemonId
+          }});
         } else {
           const selectedId = self.selectedPokemonId();
           const pokemonData = self.pokemonList().find(({ id }) => id == selectedId);
-          return moduleUtils.createConfig({ name: 'pokemonDetails', params: { pokemon: pokemonData, backToTable: self.backToTable } })
+          return moduleUtils.createConfig({ name: 'pokemonDetails', params: { pokemon: pokemonData, backToTable: self.backToTable }});
         }
       });
 

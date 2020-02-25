@@ -73,9 +73,21 @@
           </div>
         </div>
       </header>
-      <oj-module role="main" class="oj-web-applayout-max-width oj-web-applayout-content" config="[[moduleConfig]]">
-      </oj-module>
-      <footer class="oj-web-applayout-footer" role="contentinfo">
+      <oj-bind-if test="[[loading()===true]]">
+        <div class="oj-flex oj-sm-justify-content-center">
+          <oj-progress id="progressCircle" type="circle" value="[[-1]]"></oj-progress>
+        </div>
+      </oj-bind-if>
+      <oj-bind-if test="[[loading()===false && pokemonList().length > 0]]">
+        <div class="oj-web-applayout-max-width oj-web-applayout-content">
+          <oj-module
+            role="main"
+            animation="[[customAnimation]]"
+            config="[[moduleConfig]]">
+          </oj-module>
+        </div>
+      </oj-bind-if>
+      <!-- <footer class="oj-web-applayout-footer" role="contentinfo">
         <div class="oj-web-applayout-footer-item oj-web-applayout-max-width">
           <ul>
             <oj-bind-for-each data="[[footerLinks]]">
@@ -88,7 +100,7 @@
         <div class="oj-web-applayout-footer-item oj-web-applayout-max-width oj-text-secondary-color oj-text-sm">
           Copyright © 2014, 2020 Oracle and/or its affiliates All rights reserved.
         </div>
-      </footer>
+      </footer> -->
     </div>
 
     <script type="text/javascript" src="js/libs/require/require.js"></script>

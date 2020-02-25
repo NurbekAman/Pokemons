@@ -11,7 +11,7 @@ const getNumbersRandom = () => {
   return temp.map(() => getRandomInt(1, 807));
 };
 
-define([],
+define(
   function() {
     self.getPokemons = async () => {
       const pokemons = getNumbersRandom().map(async (number) => {
@@ -22,7 +22,6 @@ define([],
     });
       try {
         const result = await Promise.all(pokemons);
-        console.log(result)
         return result;
       } catch (err) {
         return [];

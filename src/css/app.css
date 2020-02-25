@@ -5,3 +5,28 @@
     Description:
         This is where any of your application specific styles should be included
 */
+
+.container {
+    display: inline-block;
+    margin: 5px 10px 0;
+    vertical-align: top;
+  }
+
+.header {
+    margin-bottom: 30px;
+}
+
+.details {
+    display: flex;
+    flex-direction: row;
+}
+
+.details-left {
+    display: flex;
+    justify-content: space-around;
+    width: 30%;
+}
+
+.custom-panel {
+    width: 100%;
+}
