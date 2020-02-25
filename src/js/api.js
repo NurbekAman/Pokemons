@@ -6,23 +6,29 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const getNumbersRandom = (count) => {
+const getNumbersRandom = () => {
   const temp = [1,2,3,4,5];
   return temp.map(() => getRandomInt(1, 807));
 };
 
-define([], function() {
-  self.getPokemons = async () => {
-    const pokemons = getNumbersRandom.map((number) => `https://pokeapi.co/api/v2/pokemon/${number}`);
+define([],
+  function() {
+    self.getPokemons = async () => {
+      const pokemons = getNumbersRandom().map(async (number) => {
+        const response = await fethcPokemons(`https://pokeapi.co/api/v2/pokemon/${number}`);
+        const data = response.json();
 
-    try {
-      const result = await Promise.all(pokemons);
+        return data;
+    });
+      try {
+        const result = await Promise.all(pokemons);
+        console.log(result)
+        return result;
+      } catch (err) {
+        return [];
+      }
+    };
 
-      return result;
-    } catch (err) {
-      return [];
-    }
-  };
-
-  return { getPokemons: getPokemons };
-});
+    return { getPokemons: getPokemons };
+  }
+);

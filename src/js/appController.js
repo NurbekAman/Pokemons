@@ -27,14 +27,17 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
       self.pokemonList = ko.observable([]);
       self.backToTable = ko.observable(false);
 
-      const getPokemons = async () => {
+      (async () => {
         try {
+          console.log('here')
           const pokemons = await api.getPokemons();
+          console.log(pokemons);
           self.pokemonList(pokemons);
         } catch (err) {
 
         }
-      };
+      })();
+
       self.moduleConfig = ko.computed(() => {
         if (self.showTable()) {
           return moduleUtils.createConfig({ name: 'table', params: { pokemonList: self.pokemonList(), selectPokemonId: self.selectedPokemonId } });
@@ -58,8 +61,6 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
            self.selectedPokemonId(null);
          }
       });
-
-      getPokemons();
 
       // Footer
       function footerLink(name, id, linkTarget) {
