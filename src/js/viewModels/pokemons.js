@@ -1,23 +1,32 @@
-const COLUMNS = [
-  { headerText: 'Enabled', field: 'isChecked', id: 'column1', template: 'checkTemplate', headerTemplate: 'checkTemplateHeader' },
-  { headerText: 'id', field: 'id' },
-  { headerText: 'name', field: 'name' },
-  { headerText: 'height', field: 'height' },
-  { headerText: 'weight', field: 'weight' },
-  { headerText: 'number of moves', field: 'numberOfMoves' },
-  { headerText: 'types', field: 'types' },
-  { headerText: 'Actions', field: 'id', template: 'viewButtonTemplate', id: 'column8' }
-];
-
-define(['knockout', 'ojs/ojarraydataprovider', 'ojs/ojknockout-keyset', 'ojs/ojmodule-element-utils', 'utils', 'ojs/ojtable', 'ojs/ojcheckboxset', 'ojs/ojoption', 'ojs/ojknockout', 'ojs/ojprogress'],
-function(ko, ArrayDataProvider, keySet, moduleUtils, utils) {
+define(['knockout', 'ojs/ojarraydataprovider', 'ojs/ojmodule-element-utils', 'utils', 'columns', 'ojs/ojtable', 'ojs/ojcheckboxset', 'ojs/ojoption', 'ojs/ojknockout', 'ojs/ojprogress'],
+function(ko, ArrayDataProvider, moduleUtils, utils, columns) {
   function TableViewModel(data) {
-    const { pokemonList, selectPokemonId } = data;
-    this.columns = ko.observable(COLUMNS);
+    const { pokemonList, selectPokemonId, selectedPokemons, showPokemons } = data;
+    this.columns = ko.observable(columns.getPokemonTable());
     this.dataProvider = ko.observable();
-    this.selectedPokemons = new keySet.ObservableKeySet();
     this.headerCheckedStatus = ko.observable([]);
+    this.showTable = ko.observable(true);
+    this.widgetName = ko.observable('pie chart');
+    this.selectedPokemons = selectedPokemons;
 
+    this.disableButton = ko.computed(() => {
+      if (this.selectedPokemons().values().size) {
+        return false;
+      }
+
+      return true;
+    });
+
+    this.onHandleClickSwitch = () => {
+      const value = this.showTable();
+      (value ? this.widgetName('table') : this.widgetName('pie chart'));
+      const element = document.getElementById('containerPokemon');
+      const startAngle = value ? '0deg' : '180deg';
+      const endAngle = value ? '180deg' : '0deg';
+
+      oj.AnimationUtils['flipOut'](element, { flipTarget: 'children', startAngle, endAngle, persist: 'all' });
+      this.showTable(!value);
+    }
     this.dataProvider = ko.computed(() => {
       return new ArrayDataProvider(utils.getTableData(pokemonList), { keyAttributes: 'id' });
     });
@@ -49,7 +58,12 @@ function(ko, ArrayDataProvider, keySet, moduleUtils, utils) {
       }
     };
 
-    this.buttonClick = ({ target: { id } }) => selectPokemonId(id);
+    this.buttonClick = ({ target: { id } }) => {
+      const isChecked = this.selectedPokemons().has(+id);
+
+      showPokemons(false);
+      selectPokemonId({ id, isChecked });
+    }
 
     this.moduleConfig = ko.computed(() => {
       const set = this.selectedPokemons().values();

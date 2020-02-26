@@ -43,7 +43,7 @@
 
   </head>
   <body class="oj-web-applayout-body">
-    <div id="globalBody" class="oj-web-applayout-page">
+    <div id="globalBody" class="oj-web-applayout-page" style="overflow: hidden;">
       <!--
          ** Oracle JET V8.1.0 web application header pattern.
          ** Please see the demos under Cookbook/Patterns/App Shell: Web
@@ -56,21 +56,6 @@
             <span role="img" class="oj-icon demo-oracle-icon" title="Oracle Logo" alt="Oracle Logo"></span>
             <h1 class="oj-sm-only-hide oj-web-applayout-header-title" title="Application Name"><oj-bind-text value="[[appName]]"></oj-bind-text></h1>
           </div>
-          <div class="oj-flex-bar-end">
-            <!-- Responsive Toolbar -->
-            <oj-toolbar>
-              <oj-menu-button id="userMenu" display="[[smScreen() ? 'icons' : 'all']]" chroming="half">
-                <span><oj-bind-text value="[[userLogin]]"></oj-bind-text></span>
-                <span slot="endIcon" :class="[[{'oj-icon demo-appheader-avatar': smScreen(), 'oj-component-icon oj-button-menu-dropdown-icon': !smScreen()}]]"></span>
-                <oj-menu id="menu1" slot="menu" style="display:none">
-                  <oj-option id="pref" value="pref">Preferences</oj-option>
-                  <oj-option id="help" value="help">Help</oj-option>
-                  <oj-option id="about" value="about">About</oj-option>
-                  <oj-option id="out" value="out">Sign Out</oj-option>
-                </oj-menu>
-              </oj-menu-button>
-            </oj-toolbar>
-          </div>
         </div>
       </header>
       <oj-bind-if test="[[loading()===true]]">
@@ -82,25 +67,11 @@
         <div class="oj-web-applayout-max-width oj-web-applayout-content">
           <oj-module
             role="main"
-            animation="[[customAnimation]]"
+            class="oj-flex oj-sm-flex-direction-column container"
             config="[[moduleConfig]]">
           </oj-module>
         </div>
       </oj-bind-if>
-      <!-- <footer class="oj-web-applayout-footer" role="contentinfo">
-        <div class="oj-web-applayout-footer-item oj-web-applayout-max-width">
-          <ul>
-            <oj-bind-for-each data="[[footerLinks]]">
-              <template>
-                <li><a :id="[[$current.data.linkId]]" :href="[[$current.data.linkTarget]]"><oj-bind-text value="[[$current.data.name]]"></oj-bind-text></a></li>
-              </template>
-            </oj-bind-for-each>
-          </ul>
-        </div>
-        <div class="oj-web-applayout-footer-item oj-web-applayout-max-width oj-text-secondary-color oj-text-sm">
-          Copyright © 2014, 2020 Oracle and/or its affiliates All rights reserved.
-        </div>
-      </footer> -->
     </div>
 
     <script type="text/javascript" src="js/libs/require/require.js"></script>

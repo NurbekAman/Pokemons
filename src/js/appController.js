@@ -1,98 +1,67 @@
-/**
- * @license
- * Copyright (c) 2014, 2020, Oracle and/or its affiliates.
- * The Universal Permissive License (UPL), Version 1.0
- * @ignore
- */
-/*
- * Your application specific code will go here
- */
-define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element', 'ojs/ojmoduleanimations', 'ojs/ojprogress'],
-  function(ResponsiveUtils, ResponsiveKnockoutUtils, ko, moduleUtils, api) {
+define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout-keyset','ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element', 'ojs/ojmoduleanimations', 'ojs/ojprogress'],
+  function(ResponsiveUtils, ResponsiveKnockoutUtils, ko, KeySet, moduleUtils, api) {
      function ControllerViewModel() {
-       var self = this;
-
       // Media queries for repsonsive layouts
       var smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
-      self.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
+      this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
-      // Header
-      // Application Name used in Branding Area
-      self.appName = ko.observable("App Name");
-      // User Info used in Global Navigation area
-      self.userLogin = ko.observable("john.hancock@oracle.com");
-
-      self.selectedPokemonId = ko.observable();
-      self.showTable = ko.observable(true);
-      self.pokemonList = ko.observable([]);
-      self.backToTable = ko.observable(false);
-      self.loading = ko.observable(false);
+      this.appName = ko.observable("Pokemons");
+      // selected pockemon id for pokemon details
+      this.selectedPokemonId = ko.observable({});
+      // array of the pokemons from server
+      this.pokemonList = ko.observable([]);
+      // array of pokemons forms for getting images
+      this.pokemonsForm = ko.observable([]);
+      // array of selected pokemons
+      this.selectedPokemons = new KeySet.ObservableKeySet();
+      // need to indicate current model
+      this.showPokemons = ko.observable(true);
+      // this.backToTable = ko.observable(false);
+      this.loading = ko.observable(false);
 
       (async () => {
-        try {
-          self.loading(true);
-          const pokemons = await api.getPokemons();
-          self.loading(false);
-          self.pokemonList(pokemons);
-        } catch (err) {
-
-        }
+        this.loading(true);
+        const data = await api.fetchPokemons();
+        this.loading(false);
+        this.pokemonList(data);
       })();
 
-      this.oldViewEffect = (oldView) => {
-        return oj.AnimationUtils.fadeOut(oldView, {duration:'500ms', persist: 'all'});
-      };
-
-      this.newViewEffect = (newView) => {
-        return oj.AnimationUtils.fadeIn(newView, {duration:'500ms', persist: 'all'});
-      }
-
-      this.customAnimation = ko.pureComputed(() => {
-        return oj.ModuleAnimations.createAnimation(this.oldViewEffect, this.newViewEffect, false);
-      });
-
-      self.moduleConfig = ko.computed(() => {
-        console.log(self.loading())
-        if (self.showTable()) {
-          return moduleUtils.createConfig({ name: 'table', params: {
-            pokemonList: self.pokemonList(),
-            selectPokemonId: self.selectedPokemonId
-          }});
-        } else {
-          const selectedId = self.selectedPokemonId();
-          const pokemonData = self.pokemonList().find(({ id }) => id == selectedId);
-          return moduleUtils.createConfig({ name: 'pokemonDetails', params: { pokemon: pokemonData, backToTable: self.backToTable }});
+      ko.computed(async () => {
+        const pokemonList = this.pokemonList();
+        if (pokemonList.length) {
+          const data = await api.fetchPokemonImages(pokemonList);
+          this.pokemonsForm(data);
         }
       });
 
-      ko.computed(() => {
-         const selectedId = self.selectedPokemonId();
-         const isBackToTable = self.backToTable();
-         if (selectedId) {
-            self.showTable(false);
-            self.backToTable(false);
-         }
+      this.moduleConfig = ko.computed(() => {
+        if (this.showPokemons()) {
+          return moduleUtils.createConfig({
+            name: 'pokemons',
+            params: {
+              pokemonList: this.pokemonList(),
+              selectPokemonId: this.selectedPokemonId,
+              selectedPokemons: this.selectedPokemons,
+              showPokemons: this.showPokemons
+            }
+          });
+        } else {
+          const { id: selectedId, isChecked } = this.selectedPokemonId();
+          const pokemonData = this.pokemonList().find(({ id }) => id == selectedId);
+          const pokemonForm = this.pokemonsForm().find(({ id }) => id == selectedId);
 
-         if (selectedId && isBackToTable) {
-           self.showTable(true);
-           self.selectedPokemonId(null);
-         }
+          return moduleUtils.createConfig({
+            name: 'pokemonDetails',
+            params: {
+              pokemonData,
+              pokemonForm,
+              showPokemons: this.showPokemons,
+              isChecked
+            }
+          });
+        }
       });
-
-      // Footer
-      function footerLink(name, id, linkTarget) {
-        this.name = name;
-        this.linkId = id;
-        this.linkTarget = linkTarget;
-      }
-      self.footerLinks = ko.observableArray([
-        new footerLink('About Oracle', 'aboutOracle', 'http://www.oracle.com/us/corporate/index.html#menu-about'),
-        new footerLink('Contact Us', 'contactUs', 'http://www.oracle.com/us/corporate/contact/index.html'),
-        new footerLink('Legal Notices', 'legalNotices', 'http://www.oracle.com/us/legal/index.html'),
-        new footerLink('Terms Of Use', 'termsOfUse', 'http://www.oracle.com/us/legal/terms/index.html'),
-        new footerLink('Your Privacy Rights', 'yourPrivacyRights', 'http://www.oracle.com/us/legal/privacy/index.html')
-      ]);
-     }
+    }
 
      return new ControllerViewModel();
   }

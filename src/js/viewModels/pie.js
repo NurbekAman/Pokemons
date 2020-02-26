@@ -1,5 +1,5 @@
-define(['knockout', 'utils', 'ojs/ojarraydataprovider', 'ojs/ojchart', 'ojs/ojknockout'],
-  function(ko, utils, ArrayDataProvider) {
+define(['knockout', 'ojs/ojarraydataprovider', 'utils', 'ojs/ojchart', 'ojs/ojknockout'],
+  function(ko, ArrayDataProvider, utils) {
     function PieViewModel(data) {
       const { types } = data;
 

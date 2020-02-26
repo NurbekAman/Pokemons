@@ -11,7 +11,7 @@ define(function() {
       const others = typeList.filter(({ type: { name } }) => name !== type.name);
 
       if (others.length) {
-        const sameCount =Math.abs(typeList.length - others.length);
+        const sameCount = Math.abs(typeList.length - others.length);
 
         countType.push({ name: type.name, count: sameCount });
 

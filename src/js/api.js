@@ -13,7 +13,7 @@ const getNumbersRandom = () => {
 
 define(
   function() {
-    self.getPokemons = async () => {
+    const fetchPokemons = async () => {
       const pokemons = getNumbersRandom().map(async (number) => {
         const response = await fethcPokemons(`https://pokeapi.co/api/v2/pokemon/${number}`);
         const data = response.json();
@@ -28,6 +28,45 @@ define(
       }
     };
 
-    return { getPokemons: getPokemons };
+    const fetchPokemonImages = async (pokemons) => {
+      const forms = pokemons.map(async ({ forms }) => {
+        const { url: urlForm } = forms[0] || {};
+
+        if (urlForm) {
+          const response = await fetch(urlForm);
+          const url = await response.json();
+
+          return url;
+        }
+
+        return '';
+      });
+
+      try {
+        const formsData = await Promise.all(forms);
+
+        return formsData;
+      } catch (err) {
+
+      }
+    }
+
+    const fetchPokemonImage = async (url) => {
+      try {
+        const response = await fetch(url);
+
+        const data = await response.json();
+
+        const { sprites } = data || {};
+
+        const { front_default } = sprites || {};
+
+        return front_default;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    return { fetchPokemons, fetchPokemonImage, fetchPokemonImages };
   }
 );

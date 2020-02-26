@@ -1,32 +1,49 @@
-<oj-button on-oj-action="[[onHandleClick]]">
-  <span slot="endIcon" class="oj-button-icon oj-start oj-navigationlist-previous-icon oj-component-icon oj-clickable-icon-nocontext"></span>
-</oj-button>
-<div class="header">
-  <h2 class="oj-header-border">Pokemon details</h2>
-</div>
-<div class="oj-flex details">
-  <div class="details-left">
-    <div class="oj-panel oj-panel-alt4 oj-sm-margin-2x custom-panel">
-      hello
-    </div>
+<div>
+  <oj-button on-oj-action="[[onHandleClick]]" chroming="borderless" class="oj-navigationlist-previous-button">
+    <span slot="endIcon" style="color: black;" class="oj-navigationlist-previous-icon oj-component-icon">back</span>
+  </oj-button>
+  <div class="header">
+    <h2 class="oj-header-border">Pokemon details</h2>
   </div>
-  <div class="oj-flex oj-flex-items-pad">
-    <div class="oj-flex oj-sm-flex-direction-column">
-      <div class="oj-flex-item">
-        <oj-label for="isChecked">Pokemon is checked: </oj-label>
-        <oj-input-text id="isChecked" value="[[isChecked]]" disabled></oj-input-text>
+  <div class="oj-flex details">
+    <div class="oj-panel oj-panel-alt1 oj-sm-margin-4x oj-panel-shadow-sm details-left">
+      <div class="oj-flex oj-sm-flex-direction-column oj-sm-align-items-center">
+        <img alt="pokemon" class="image-pokemon oj-icon" data-bind="attr: {src: getUrlImage()}"></img>
+        <h2>
+          <oj-bind-text value="[[name]]"></oj-bind-text>
+        </h2>
       </div>
-      <div class="oj-flex-item">
-        <oj-label for="weight">weight: </oj-label>
-        <oj-input-text id="weight" value="[[weight]]" disabled></oj-input-text>
-      </div>
-      <div class="oj-flex-item">
-        <oj-label for="height">height: </oj-label>
-        <oj-input-text id="height" value="[[height]]" disabled></oj-input-text>
-      </div>
-      <div class="oj-flex-item">
-        <oj-label for="name">name: </oj-label>
-        <oj-input-text id="name" value="[[name]]" disabled></oj-input-text>
+    </div>
+    <div class="oj-flex oj-flex-items-pad oj-panel oj-panel-shadow-sm oj-sm-margin-2x details-right">
+      <div class="oj-flex oj-sm-flex-direction-column">
+          <div class="oj-flex oj-sm-align-items-center">
+            <oj-label for="weight">Weight: </oj-label>
+            <oj-input-text id="weight" value="[[weight]]" style="max-width: none;" disabled></oj-input-text>
+          </div>
+          <div class="oj-flex oj-sm-align-items-center">
+            <oj-label for="height">Weight: </oj-label>
+            <oj-input-text id="height" value="[[height]]" style="max-width: none;" disabled></oj-input-text>
+          </div>
+          <div class="oj-flex oj-sm-align-items-center">
+            <oj-label for="name">Name: </oj-label>
+            <oj-input-text id="name" value="[[name]]" style="max-width: none;" disabled></oj-input-text>
+          </div>
+          <div class="oj-flex oj-sm-align-items-center">
+            <oj-label for="name">Number of moves: </oj-label>
+            <oj-input-text id="name" value="[[numberOfMoves]]" style="max-width: none;" disabled></oj-input-text>
+          </div>
+          <div class="oj-flex oj-sm-align-items-center">
+            <oj-label for="isCheckedDetail">Pokemon is checked? </oj-label>
+            <oj-checkboxset id="isCheckedDetail" value="[[isChecked]]" disabled>
+              <oj-option id="isCheckedDetail1" value="checked"></oj-option>
+            </oj-checkboxset>
+          </div>
+          <oj-table
+            aria-label="Pokemon types"
+            data="{{dataProvider}}"
+            columns="[[columns]]"
+            style="background-color: white;">
+          </oj-table>
       </div>
     </div>
   </div>
