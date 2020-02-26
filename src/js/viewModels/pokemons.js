@@ -4,7 +4,6 @@ function(ko, ArrayDataProvider, moduleUtils, utils, columns) {
     const { pokemonList, selectPokemonId, selectedPokemons, showPokemons } = data;
     this.columns = ko.observable(columns.getPokemonTable());
     this.dataProvider = ko.observable();
-    this.headerCheckedStatus = ko.observable([]);
     this.showTable = ko.observable(true);
     this.widgetName = ko.observable('pie chart');
     this.selectedPokemons = selectedPokemons;
@@ -47,6 +46,14 @@ function(ko, ArrayDataProvider, moduleUtils, utils, columns) {
       const isChecked = this.selectedPokemons().has(id);
       return isChecked ? [id] : [];
     };
+
+    this.headerCheckedStatus = ko.pureComputed(() => {
+      if (pokemonList.length === this.selectedPokemons().values().size) {
+        return ['checked'];
+      }
+
+      return [];
+    });
 
     this.onChangeCheckboxHeader = (event) => {
       const { detail: { value } } = event;

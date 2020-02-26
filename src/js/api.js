@@ -1,25 +1,34 @@
-const fethcPokemons = (url) => fetch(url);
-
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-const getNumbersRandom = () => {
-  const temp = [1,2,3,4,5];
-  return temp.map(() => getRandomInt(1, 807));
-};
-
 define(
   function() {
+    const fetchData = async (url) => {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      return data;
+    }
+
+    const getRandomInt = (numbers) => numbers[Math.floor(Math.random() * numbers.length)];
+
+    const getNumbersRandom = () => {
+      const temp = [1,2,3,4,5];
+      // easy to add or delete element that us why here i used Set
+      const pokemonNumber = new Set();
+      for (let i = 1; i < 808; i++) {
+        pokemonNumber.add(i);
+      }
+
+      return temp.map(() => {
+        const number = getRandomInt([...pokemonNumber]);
+        pokemonNumber.delete(number);
+
+        return number;
+      })
+    };
+
     const fetchPokemons = async () => {
       const pokemons = getNumbersRandom().map(async (number) => {
-        const response = await fethcPokemons(`https://pokeapi.co/api/v2/pokemon/${number}`);
-        const data = response.json();
-
-        return data;
-    });
+        return fetchData(`https://pokeapi.co/api/v2/pokemon/${number}`);
+      });
       try {
         const result = await Promise.all(pokemons);
         return result;
@@ -33,10 +42,7 @@ define(
         const { url: urlForm } = forms[0] || {};
 
         if (urlForm) {
-          const response = await fetch(urlForm);
-          const url = await response.json();
-
-          return url;
+          return fetchData(urlForm);
         }
 
         return '';
@@ -47,26 +53,10 @@ define(
 
         return formsData;
       } catch (err) {
-
+        return [];
       }
     }
 
-    const fetchPokemonImage = async (url) => {
-      try {
-        const response = await fetch(url);
-
-        const data = await response.json();
-
-        const { sprites } = data || {};
-
-        const { front_default } = sprites || {};
-
-        return front_default;
-      } catch (err) {
-        return null;
-      }
-    }
-
-    return { fetchPokemons, fetchPokemonImage, fetchPokemonImages };
+    return { fetchPokemons, fetchPokemonImages };
   }
 );

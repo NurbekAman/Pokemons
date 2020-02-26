@@ -16,22 +16,16 @@
     </div>
     <div class="oj-flex oj-flex-items-pad oj-panel oj-panel-shadow-sm oj-sm-margin-2x details-right">
       <div class="oj-flex oj-sm-flex-direction-column">
-          <div class="oj-flex oj-sm-align-items-center">
-            <oj-label for="weight">Weight: </oj-label>
-            <oj-input-text id="weight" value="[[weight]]" style="max-width: none;" disabled></oj-input-text>
-          </div>
-          <div class="oj-flex oj-sm-align-items-center">
-            <oj-label for="height">Weight: </oj-label>
-            <oj-input-text id="height" value="[[height]]" style="max-width: none;" disabled></oj-input-text>
-          </div>
-          <div class="oj-flex oj-sm-align-items-center">
-            <oj-label for="name">Name: </oj-label>
-            <oj-input-text id="name" value="[[name]]" style="max-width: none;" disabled></oj-input-text>
-          </div>
-          <div class="oj-flex oj-sm-align-items-center">
-            <oj-label for="name">Number of moves: </oj-label>
-            <oj-input-text id="name" value="[[numberOfMoves]]" style="max-width: none;" disabled></oj-input-text>
-          </div>
+          <oj-bind-for-each data="[[controls]]">
+            <template>
+              <div class="oj-flex oj-sm-align-items-center">
+                <oj-label for="[[$current.data.label]]">
+                  <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+                </oj-label>
+                <oj-input-text :id="[[$current.data.label]]" value=[[$current.data.value]] style="max-width: none;" disabled></oj-input-text>
+              </div>
+            </template>
+          </oj-bind-for-each>
           <div class="oj-flex oj-sm-align-items-center">
             <oj-label for="isCheckedDetail">Pokemon is checked? </oj-label>
             <oj-checkboxset id="isCheckedDetail" value="[[isChecked]]" disabled>

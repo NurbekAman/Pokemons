@@ -1,5 +1,5 @@
-define(['knockout', 'ojs/ojconverterutils-i18n', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojlabel', 'ojs/ojinputtext', 'ojs/ojtable', 'ojs/ojcheckboxset'],
-  function(ko, ConvertUtils, ArrayDataProvider, columns) {
+define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs/ojlabel', 'ojs/ojinputtext', 'ojs/ojtable', 'ojs/ojcheckboxset'],
+  function(ko, ArrayDataProvider, columns) {
     function PokemonViewModel(data) {
       const { pokemonData, pokemonForm, showPokemons, isChecked } = data;
       const { weight, height, name, types, moves } = pokemonData;
@@ -9,8 +9,13 @@ define(['knockout', 'ojs/ojconverterutils-i18n', 'ojs/ojarraydataprovider', 'col
       this.height = height;
       this.name = name;
       this.numberOfMoves = moves.length;
-      this.initials = ConvertUtils.IntlConverterUtils.getInitials(name);
 
+      this.controls = ko.observableArray([
+        { label: 'Weight', value: weight },
+        { label: 'Height', value: height },
+        { label: 'Name', value: name },
+        { label: 'Number of moves', value: moves.length }
+      ]);
       this.isChecked = ko.observable([isChecked ? 'checked' : '']);
 
       this.getUrlImage = () => {
@@ -27,9 +32,7 @@ define(['knockout', 'ojs/ojconverterutils-i18n', 'ojs/ojarraydataprovider', 'col
         return new ArrayDataProvider(pokemonTypes, { keyAttributes: 'name' });
       });
 
-      this.onHandleClick = () => {
-        showPokemons(true);
-      }
+      this.onHandleClick = () => showPokemons(true);
     }
 
     return PokemonViewModel;
