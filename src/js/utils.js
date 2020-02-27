@@ -12,7 +12,7 @@ define(function() {
    * @return [{ name: 'ground', count: 2 }, { name: 'water', count: 1 }, { name: 'fire', count: 1 }]
    */
   const getPokemonTypesCount = (types) => {
-    const countType = [];
+    const result = [];
 
     function distributeTypes(typeList) {
       if (!typeList.length) {
@@ -25,11 +25,11 @@ define(function() {
       if (others.length) {
         const countSameTypes = Math.abs(typeList.length - others.length);
 
-        countType.push({ name: type.name, count: countSameTypes });
+        result.push({ name: type.name, count: countSameTypes });
 
         return distributeTypes(others);
       } else {
-        countType.push({ name: type.name, count: typeList.length });
+        result.push({ name: type.name, count: typeList.length });
 
         return;
       }
@@ -37,7 +37,7 @@ define(function() {
 
     distributeTypes(types);
 
-    return countType;
+    return result;
   }
 
   const convertTypesToString = (types) => types.reduce((acc, { type: { name } }, index) => {
