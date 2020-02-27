@@ -5,7 +5,7 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
       var smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
       this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
-      this.appName = ko.observable("Pokemons");
+      this.appName ='Pokemons';
       // selected pockemon id for pokemon details
       this.selectedPokemonId = ko.observable({});
       // array of the pokemons from server
@@ -21,7 +21,7 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
       // error
       this.error = ko.observable('');
 
-      (async () => {
+      ko.computed(async () => {
         try {
           this.loading(true);
           const data = await api.fetchPokemons();
@@ -31,7 +31,7 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
         } finally {
           this.loading(false);
         }
-      })();
+      });
 
       ko.computed(async () => {
         const pokemonList = this.pokemonList();

@@ -24,7 +24,6 @@ define(function() {
 
       if (others.length) {
         const countSameTypes = Math.abs(typeList.length - others.length);
-
         result.push({ name: type.name, count: countSameTypes });
 
         return distributeTypes(others);

@@ -2,11 +2,11 @@ define(['knockout', 'ojs/ojarraydataprovider', 'ojs/ojmodule-element-utils', 'ut
 function(ko, ArrayDataProvider, moduleUtils, utils, columns) {
   function TableViewModel(data) {
     const { pokemonList, selectPokemonId, selectedPokemons, showPokemons } = data;
-    this.columns = ko.observable(columns.getPokemonTable());
     this.dataProvider = ko.observable();
     this.showTable = ko.observable(true);
     this.widgetName = ko.observable('pie chart');
     this.selectedPokemons = selectedPokemons;
+    this.columns = columns.POKEMON_TABLE;
 
     this.disableButton = ko.computed(() => {
       if (this.selectedPokemons().values().size) {

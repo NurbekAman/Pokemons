@@ -9,6 +9,7 @@ define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs
       this.height = height;
       this.name = name;
       this.numberOfMoves = moves.length;
+      this.columns = columns.TYPES_TABLE;
 
       this.controls = ko.observableArray([
         { label: 'Weight', value: weight },
@@ -23,7 +24,6 @@ define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs
         const { front_default } = sprites || {};
         return front_default ? front_default : ''
       }
-      this.columns = columns.getTypesTable();
       this.dataProvider = ko.computed(() => {
         const pokemonTypes = types.reduce((acc, { type }) => {
           const { name } = type;
