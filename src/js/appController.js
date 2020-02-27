@@ -1,4 +1,4 @@
-define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout-keyset','ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element', 'ojs/ojmoduleanimations', 'ojs/ojprogress'],
+define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout-keyset','ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element', 'ojs/ojprogress'],
   function(ResponsiveUtils, ResponsiveKnockoutUtils, ko, KeySet, moduleUtils, api) {
      function ControllerViewModel() {
       // Media queries for repsonsive layouts
