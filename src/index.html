@@ -40,10 +40,9 @@
 
     <!-- This is where you would add any app specific styling -->
     <link rel="stylesheet" href="css/app.css" type="text/css"/>
-
   </head>
   <body class="oj-web-applayout-body">
-    <div id="globalBody" class="oj-web-applayout-page" style="overflow: hidden;">
+    <div id="globalBody" class="oj-web-applayout-page">
       <!--
          ** Oracle JET V8.1.0 web application header pattern.
          ** Please see the demos under Cookbook/Patterns/App Shell: Web
@@ -64,19 +63,14 @@
         </div>
       </oj-bind-if>
       <oj-bind-if test="[[loading()===false && pokemonList().length > 0]]">
-        <div class="oj-web-applayout-max-width oj-web-applayout-content">
-          <oj-module
-            role="main"
-            class="oj-flex oj-sm-flex-direction-column container"
-            config="[[moduleConfig]]">
-          </oj-module>
-        </div>
+        <oj-module
+          role="main"
+          class="oj-web-applayout-max-width oj-web-applayout-content"
+          config="[[moduleConfig]]">
+        </oj-module>
       </oj-bind-if>
     </div>
-
     <script type="text/javascript" src="js/libs/require/require.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-
   </body>
-
 </html>

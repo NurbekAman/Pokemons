@@ -7,11 +7,12 @@ define(
       return data;
     }
 
+    // get random within the numbers
     const getRandomInt = (numbers) => numbers[Math.floor(Math.random() * numbers.length)];
 
     const getNumbersRandom = () => {
       const temp = [1,2,3,4,5];
-      // easy to add or delete element that us why here i used Set
+      // for delete operation Set is cheaper and this is the reason of using it
       const pokemonNumber = new Set();
       for (let i = 1; i < 808; i++) {
         pokemonNumber.add(i);
@@ -26,11 +27,9 @@ define(
     };
 
     const fetchPokemons = async () => {
-      const pokemons = getNumbersRandom().map(async (number) => {
-        return fetchData(`https://pokeapi.co/api/v2/pokemon/${number}`);
-      });
+      const requestPokemons = getNumbersRandom().map((number) => fetchData(`https://pokeapi.co/api/v2/pokemon/${number}`));
       try {
-        const result = await Promise.all(pokemons);
+        const result = await Promise.all(requestPokemons);
         return result;
       } catch (err) {
         return [];
@@ -38,18 +37,18 @@ define(
     };
 
     const fetchPokemonImages = async (pokemons) => {
-      const forms = pokemons.map(async ({ forms }) => {
-        const { url: urlForm } = forms[0] || {};
+      const requestImages = pokemons.map(({ forms }) => {
+        const { url } = forms[0] || {};
 
-        if (urlForm) {
-          return fetchData(urlForm);
+        if (url) {
+          return fetchData(url);
         }
 
         return '';
       });
 
       try {
-        const formsData = await Promise.all(forms);
+        const formsData = await Promise.all(requestImages);
 
         return formsData;
       } catch (err) {

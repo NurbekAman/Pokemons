@@ -2,7 +2,7 @@ define(function() {
   const getPokemonTypesCount = (types) => {
     const countType = [];
 
-    function calcCount(typeList) {
+    function distributeTypes(typeList) {
       if (!typeList.length) {
         return;
       }
@@ -11,11 +11,11 @@ define(function() {
       const others = typeList.filter(({ type: { name } }) => name !== type.name);
 
       if (others.length) {
-        const sameCount = Math.abs(typeList.length - others.length);
+        const countSameTypes = Math.abs(typeList.length - others.length);
 
-        countType.push({ name: type.name, count: sameCount });
+        countType.push({ name: type.name, count: countSameTypes });
 
-        return calcCount(others);
+        return distributeTypes(others);
       } else {
         countType.push({ name: type.name, count: typeList.length });
 
@@ -23,13 +23,13 @@ define(function() {
       }
     }
 
-    calcCount(types);
+    distributeTypes(types);
 
     return countType;
   }
 
   const convertTypesToString = (types) => types.reduce((acc, { type: { name } }, index) => {
-    if (index === types. length - 1) {
+    if (index === types.length - 1) {
       return acc + name;
     }
 

@@ -1,16 +1,14 @@
-<div style="height: inherit;">
-  <div class="header">
-    <h2 class="oj-header-border">Pokemon's view</h2>
-  </div>
+<div class="container">
+  <h2 class="oj-header-border">Pokemon's view</h2>
   <oj-button on-oj-action="[[onHandleClickSwitch]]" disabled="[[disableButton]]">
     <span>switch to <oj-bind-text value="[[widgetName]]"></oj-bind-text></span>
   </oj-button>
   <div class="container-pokemon" id="containerPokemon">
-    <div class="pokemon-pie oj-animation-backface">
+    <div class="cardfront pokemon-pie oj-animation-backface">
       <oj-module role="main" class="oj-web-applayout-content" config="[[moduleConfig]]">
       </oj-module>
     </div>
-    <div class="pokemon-table">
+    <div class="cardfront">
       <oj-table
         aria-label="Pokemons Table"
         data="{{dataProvider}}"

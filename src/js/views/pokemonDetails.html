@@ -2,11 +2,9 @@
   <oj-button on-oj-action="[[onHandleClick]]" chroming="borderless" class="oj-navigationlist-previous-button">
     <span slot="endIcon" style="color: black;" class="oj-navigationlist-previous-icon oj-component-icon">back</span>
   </oj-button>
-  <div class="header">
-    <h2 class="oj-header-border">Pokemon details</h2>
-  </div>
-  <div class="oj-flex details">
-    <div class="oj-panel oj-panel-alt1 oj-sm-margin-4x oj-panel-shadow-sm details-left">
+  <h2 class="oj-header-border">Pokemon details</h2>
+  <div class="oj-flex pokemon-details">
+    <div class="oj-panel oj-panel-alt1 oj-sm-margin-4x oj-panel-shadow-sm pokemon-details-left">
       <div class="oj-flex oj-sm-flex-direction-column oj-sm-align-items-center">
         <img alt="pokemon" class="image-pokemon oj-icon" data-bind="attr: {src: getUrlImage()}"></img>
         <h2>
@@ -14,7 +12,7 @@
         </h2>
       </div>
     </div>
-    <div class="oj-flex oj-flex-items-pad oj-panel oj-panel-shadow-sm oj-sm-margin-2x details-right">
+    <div class="oj-flex oj-flex-items-pad oj-panel oj-panel-shadow-sm oj-sm-margin-2x pokemon-details-right">
       <div class="oj-flex oj-sm-flex-direction-column">
           <oj-bind-for-each data="[[controls]]">
             <template>
@@ -27,7 +25,8 @@
             </template>
           </oj-bind-for-each>
           <div class="oj-flex oj-sm-align-items-center">
-            <oj-label for="isCheckedDetail">Pokemon is checked? </oj-label>
+            <oj-label for="isCheckedDetail">Pokemon is checked?</oj-label>
+            &nbsp;
             <oj-checkboxset id="isCheckedDetail" value="[[isChecked]]" disabled>
               <oj-option id="isCheckedDetail1" value="checked"></oj-option>
             </oj-checkboxset>

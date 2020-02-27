@@ -5,6 +5,9 @@
     Description:
         This is where any of your application specific styles should be included
 */
+.oj-web-applayout-body {
+    overflow: hidden;
+}
 
 .container {
     height: 500px;
@@ -19,7 +22,7 @@
     transform: rotateY(180deg);
 }
 
-.pokemon-table, .pokemon-pie {
+.cardfront {
     position: absolute;
     backface-visibility: hidden;
     top: 0;
@@ -28,17 +31,17 @@
     height: 100%;
 }
 
-.header {
+.oj-header-border {
     margin-bottom: 30px;
 }
 
-.details {
+.pokemon-details {
     display: flex;
     flex-direction: row;
     flex: 1;
 }
 
-.details-left {
+.pokemon-details-left {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -48,8 +51,8 @@
     box-shadow: 5px 3px 5px -1px hsla(0,0%,0%,.3);
 }
 
-.details-right {
-    margin-left: 0;
+.pokemon-details-right {
+    margin-left: -1px;
     flex: 1;
     background-color: #edfcf9;
     justify-content: space-around;
@@ -66,8 +69,4 @@
     height: 150px;
     background-size: cover;
     background-repeat: no-repeat;
-}
-
-.input-control {
-    max-width: none;
 }
