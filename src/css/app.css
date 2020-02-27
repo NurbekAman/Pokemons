@@ -70,3 +70,7 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+.oj-progress-circle {
+    margin: auto;
+}

@@ -28,12 +28,8 @@ define(
 
     const fetchPokemons = async () => {
       const requestPokemons = getNumbersRandom().map((number) => fetchData(`https://pokeapi.co/api/v2/pokemon/${number}`));
-      try {
-        const result = await Promise.all(requestPokemons);
-        return result;
-      } catch (err) {
-        return [];
-      }
+      const result = await Promise.all(requestPokemons);
+      return result;
     };
 
     const fetchPokemonImages = async (pokemons) => {
@@ -47,13 +43,8 @@ define(
         return '';
       });
 
-      try {
-        const formsData = await Promise.all(requestImages);
-
-        return formsData;
-      } catch (err) {
-        return [];
-      }
+      const formsData = await Promise.all(requestImages);
+      return formsData;
     }
 
     return { fetchPokemons, fetchPokemonImages };

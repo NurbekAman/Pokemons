@@ -18,12 +18,19 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
       this.showPokemons = ko.observable(true);
       // this.backToTable = ko.observable(false);
       this.loading = ko.observable(false);
+      // error
+      this.error = ko.observable('');
 
       (async () => {
-        this.loading(true);
-        const data = await api.fetchPokemons();
-        this.loading(false);
-        this.pokemonList(data);
+        try {
+          this.loading(true);
+          const data = await api.fetchPokemons();
+          this.pokemonList(data);
+        } catch (err) {
+          this.error('something wrong on the server, please reload page');
+        } finally {
+          this.loading(false);
+        }
       })();
 
       ko.computed(async () => {
@@ -48,6 +55,7 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
         } else {
           const { id: selectedId, isChecked } = this.selectedPokemonId();
           const pokemonData = this.pokemonList().find(({ id }) => id == selectedId);
+          // array of pokemon's form
           const pokemonForm = this.pokemonsForm().find(({ id }) => id == selectedId);
 
           return moduleUtils.createConfig({
