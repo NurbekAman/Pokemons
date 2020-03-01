@@ -18,6 +18,7 @@ define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs
       this.pokemonId = ko.observable();
       this.loading = ko.observable();
       this.error = ko.observable('');
+      this.name = ko.observable('');
 
       ko.computed(() => {
         const { pokemonId, isChecked } = this.router.retrieve() || {};
@@ -30,6 +31,7 @@ define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs
             this.isChecked([isChecked === true ? 'checked' : '']);
             this.types(types);
             this.pokemonId(pokemonId);
+            this.name(name);
 
             const { url } = forms[0] || {};
             this.urlForm(url);
