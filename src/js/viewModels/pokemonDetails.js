@@ -80,6 +80,7 @@ define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs
       });
 
       this.onHandleClick = () => {
+        this.router.store()
         this.router.go('/');
       }
     }
