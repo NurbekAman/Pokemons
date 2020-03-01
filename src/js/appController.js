@@ -23,22 +23,13 @@ define(['ojs/ojrouter', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils'
 
       this.moduleConfig = ko.pureComputed(() => {
         const name = this.router.moduleConfig.name();
-        const parentRouter = this.router;
-        const pokemonList = this.pokemonList();
-        const params = name === 'pokemons' ? {
-          parentRouter,
-          pokemonList,
-          selectedPokemons: this.selectedPokemons,
-        } : {
-          parentRouter,
-          pokemonList: this.pokemonList()
-        }
 
         return moduleUtils.createConfig({
           name: name,
           params: {
             parentRouter: this.router,
-            ...params
+            pokemonList: this.pokemonList(),
+            selectedPokemons: name === 'pokemons' ? this.selectedPokemons : undefined
           }
         })
       });
