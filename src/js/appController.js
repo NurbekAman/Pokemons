@@ -1,25 +1,47 @@
-define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout-keyset','ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element', 'ojs/ojprogress'],
-  function(ResponsiveUtils, ResponsiveKnockoutUtils, ko, KeySet, moduleUtils, api) {
-     function ControllerViewModel() {
+define(['ojs/ojrouter', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'ojs/ojknockout-keyset','ojs/ojmodule-element-utils', 'api', 'ojs/ojknockout', 'ojs/ojmodule-element', 'ojs/ojprogress', 'ojs/ojurlparamadapter'],
+  function(Router, ResponsiveUtils, ResponsiveKnockoutUtils, ko, KeySet, moduleUtils, api) {
+      function ControllerViewModel() {
       // Media queries for repsonsive layouts
       var smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
       this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
       this.appName ='Pokemons';
-      // selected pockemon id for pokemon details
-      this.selectedPokemonId = ko.observable({});
       // array of the pokemons from server
       this.pokemonList = ko.observable([]);
-      // array of pokemons forms for getting images
-      this.pokemonsForm = ko.observable([]);
       // array of selected pokemons
       this.selectedPokemons = new KeySet.ObservableKeySet();
-      // need to indicate current model
-      this.showPokemons = ko.observable(true);
-      // this.backToTable = ko.observable(false);
       this.loading = ko.observable(false);
       // error
       this.error = ko.observable('');
+
+      this.router = Router.rootInstance;
+      Router.defaults['urlAdapter'] = new Router.urlParamAdapter();
+      this.router.configure({
+        'pokemons': { label: 'Pokemons', value: 'pokemons', isDefault: true },
+        'pokemonDetails/{pokemonId}/{isChecked}': { label: 'Pokemon details', value: 'pokemonDetails' }
+      });
+
+      this.moduleConfig = ko.pureComputed(() => {
+        const name = this.router.moduleConfig.name();
+        const parentRouter = this.router;
+        const pokemonList = this.pokemonList();
+        const params = name === 'pokemons' ? {
+          parentRouter,
+          pokemonList,
+          selectedPokemons: this.selectedPokemons,
+        } : {
+          parentRouter,
+          pokemonList: this.pokemonList()
+        }
+
+        return moduleUtils.createConfig({
+          name: name,
+          params: {
+            parentRouter: this.router,
+            ...params
+          }
+        })
+      });
 
       ko.computed(async () => {
         try {
@@ -30,43 +52,6 @@ define(['ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils', 'knockout', 'o
           this.error('something wrong on the server, please reload page');
         } finally {
           this.loading(false);
-        }
-      });
-
-      ko.computed(async () => {
-        const pokemonList = this.pokemonList();
-        if (pokemonList.length) {
-          const data = await api.fetchPokemonImages(pokemonList);
-          this.pokemonsForm(data);
-        }
-      });
-
-      this.moduleConfig = ko.computed(() => {
-        if (this.showPokemons()) {
-          return moduleUtils.createConfig({
-            name: 'pokemons',
-            params: {
-              pokemonList: this.pokemonList(),
-              selectPokemonId: this.selectedPokemonId,
-              selectedPokemons: this.selectedPokemons,
-              showPokemons: this.showPokemons
-            }
-          });
-        } else {
-          const { id: selectedId, isChecked } = this.selectedPokemonId();
-          const pokemonData = this.pokemonList().find(({ id }) => id == selectedId);
-          // array of pokemon's form
-          const pokemonForm = this.pokemonsForm().find(({ id }) => id == selectedId);
-
-          return moduleUtils.createConfig({
-            name: 'pokemonDetails',
-            params: {
-              pokemonData,
-              pokemonForm,
-              showPokemons: this.showPokemons,
-              isChecked
-            }
-          });
         }
       });
     }

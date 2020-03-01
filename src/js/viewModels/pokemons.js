@@ -1,13 +1,13 @@
 define(['knockout', 'ojs/ojarraydataprovider', 'ojs/ojmodule-element-utils', 'utils', 'columns', 'ojs/ojtable', 'ojs/ojcheckboxset', 'ojs/ojoption', 'ojs/ojknockout', 'ojs/ojprogress'],
 function(ko, ArrayDataProvider, moduleUtils, utils, columns) {
   function TableViewModel(data) {
-    const { pokemonList, selectPokemonId, selectedPokemons, showPokemons } = data;
+    const { pokemonList, selectedPokemons, parentRouter } = data;
     this.dataProvider = ko.observable();
     this.showTable = ko.observable(true);
     this.widgetName = ko.observable('pie chart');
     this.selectedPokemons = selectedPokemons;
     this.columns = columns.POKEMON_TABLE;
-
+    this.router = parentRouter;
     this.disableButton = ko.computed(() => {
       if (this.selectedPokemons().values().size) {
         return false;
@@ -68,8 +68,7 @@ function(ko, ArrayDataProvider, moduleUtils, utils, columns) {
     this.buttonClick = ({ target: { id } }) => {
       const isChecked = this.selectedPokemons().has(+id);
 
-      showPokemons(false);
-      selectPokemonId({ id, isChecked });
+      this.router.go(`pokemonDetails/${id}/${isChecked}`);
     }
 
     this.moduleConfig = ko.computed(() => {

@@ -13,21 +13,6 @@ define(['utils'],
       return result;
     };
 
-    const fetchPokemonImages = async (pokemons) => {
-      const requestImages = pokemons.map(({ forms }) => {
-        const { url } = forms[0] || {};
-
-        if (url) {
-          return fetchData(url);
-        }
-
-        return '';
-      });
-
-      const formsData = await Promise.all(requestImages);
-      return formsData;
-    }
-
-    return { fetchPokemons, fetchPokemonImages };
+    return { fetchPokemons };
   }
 );

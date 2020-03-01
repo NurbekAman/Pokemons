@@ -123,7 +123,7 @@
         "path": "libs/oj/v#{version}/min_es5",
         "cdnPath": "min_es5"
       }
-    },    
+    },
 
     "ojL10n": {
       "cdn": "jet",
@@ -245,8 +245,8 @@
         "path": "libs/corejs/shim.min.js",
         "cdnPath": "corejs/shim.min"
       }
-    },    
-        
+    },
+
     "customElements": {
       "cdn": "3rdparty",
       "cwd": "node_modules/@webcomponents/custom-elements",
@@ -267,7 +267,7 @@
       "cwd": "proj4/dist",
       "debug": {
         "src":  "proj4-src.js",
-        "path": "libs/proj4js/dist/proj4-src.js", 
+        "path": "libs/proj4js/dist/proj4-src.js",
         "cdnPath": "proj4js/dist/proj4"
       },
       "release": {
@@ -276,7 +276,7 @@
         "cdnPath": "proj4js/dist/proj4"
       }
     },
-        
+
     "css": {
       "cdn": "3rdparty",
       "cwd": "node_modules/require-css",

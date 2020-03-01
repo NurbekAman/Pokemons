@@ -3,41 +3,51 @@
     <span slot="endIcon" style="color: black;" class="oj-navigationlist-previous-icon oj-component-icon">back</span>
   </oj-button>
   <h2 class="oj-header-border">Pokemon details</h2>
-  <div class="oj-flex pokemon-details">
-    <div class="oj-panel oj-panel-alt1 oj-sm-margin-4x oj-panel-shadow-sm pokemon-details-left">
-      <div class="oj-flex oj-sm-flex-direction-column oj-sm-align-items-center">
-        <img alt="pokemon" class="image-pokemon oj-icon" data-bind="attr: {src: getUrlImage()}"></img>
-        <h2>
-          <oj-bind-text value="[[name]]"></oj-bind-text>
-        </h2>
+  <oj-bind-if test="[[error() !== '']]">
+    <oj-bind-text value="[[error()]]"></oj-bind-text>
+  </oj-bind-if>
+  <oj-bind-if test="[[controls().length > 0]]">
+    <div class="oj-flex pokemon-details">
+      <div class="oj-panel oj-panel-alt1 oj-sm-margin-4x oj-panel-shadow-sm pokemon-details-left">
+        <div class="oj-flex oj-sm-flex-direction-column oj-sm-align-items-center">
+          <oj-bind-if test="[[loading()===true]]">
+            <oj-progress id="progressCircle" type="circle" value="[[-1]]"></oj-progress>
+          </oj-bind-if>
+          <oj-bind-if test="[[loading()===false]]">
+            <img alt="pokemon" class="image-pokemon oj-icon" data-bind="attr: {src: getUrlImage()}"></img>
+            <h2>
+              <oj-bind-text value="[[name]]"></oj-bind-text>
+            </h2>
+          </oj-bind-if>
+        </div>
+      </div>
+      <div class="oj-flex oj-flex-items-pad oj-panel oj-panel-shadow-sm oj-sm-margin-2x pokemon-details-right">
+        <div class="oj-flex oj-sm-flex-direction-column">
+            <oj-bind-for-each data="[[controls]]">
+              <template>
+                <div class="oj-flex oj-sm-align-items-center">
+                  <oj-label for="[[$current.data.label]]">
+                    <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+                  </oj-label>
+                  <oj-input-text :id="[[$current.data.label]]" value=[[$current.data.value]] style="max-width: none;" disabled></oj-input-text>
+                </div>
+              </template>
+            </oj-bind-for-each>
+            <div class="oj-flex oj-sm-align-items-center">
+              <oj-label for="isCheckedDetail">Pokemon is checked?</oj-label>
+              &nbsp;
+              <oj-checkboxset id="isCheckedDetail" value="[[isChecked]]" disabled>
+                <oj-option id="isCheckedDetail1" value="checked"></oj-option>
+              </oj-checkboxset>
+            </div>
+            <oj-table
+              aria-label="Pokemon types"
+              data="{{dataProvider}}"
+              columns="[[columns]]"
+              style="background-color: white;">
+            </oj-table>
+        </div>
       </div>
     </div>
-    <div class="oj-flex oj-flex-items-pad oj-panel oj-panel-shadow-sm oj-sm-margin-2x pokemon-details-right">
-      <div class="oj-flex oj-sm-flex-direction-column">
-          <oj-bind-for-each data="[[controls]]">
-            <template>
-              <div class="oj-flex oj-sm-align-items-center">
-                <oj-label for="[[$current.data.label]]">
-                  <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
-                </oj-label>
-                <oj-input-text :id="[[$current.data.label]]" value=[[$current.data.value]] style="max-width: none;" disabled></oj-input-text>
-              </div>
-            </template>
-          </oj-bind-for-each>
-          <div class="oj-flex oj-sm-align-items-center">
-            <oj-label for="isCheckedDetail">Pokemon is checked?</oj-label>
-            &nbsp;
-            <oj-checkboxset id="isCheckedDetail" value="[[isChecked]]" disabled>
-              <oj-option id="isCheckedDetail1" value="checked"></oj-option>
-            </oj-checkboxset>
-          </div>
-          <oj-table
-            aria-label="Pokemon types"
-            data="{{dataProvider}}"
-            columns="[[columns]]"
-            style="background-color: white;">
-          </oj-table>
-      </div>
-    </div>
-  </div>
+  </oj-bind-if>
 </div>
