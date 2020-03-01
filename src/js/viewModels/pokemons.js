@@ -67,8 +67,8 @@ function(ko, ArrayDataProvider, moduleUtils, utils, columns) {
 
     this.buttonClick = ({ target: { id } }) => {
       const isChecked = this.selectedPokemons().has(+id);
-
-      this.router.go(`pokemonDetails/${id}/${isChecked}`);
+      this.router.go('pokemonDetails');
+      this.router.store({ pokemonId: id, isChecked });
     }
 
     this.moduleConfig = ko.computed(() => {

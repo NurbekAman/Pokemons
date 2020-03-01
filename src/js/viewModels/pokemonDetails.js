@@ -20,17 +20,14 @@ define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs
       this.error = ko.observable('');
 
       ko.computed(() => {
-        const stateParams = this.router.observableModuleConfig().params.ojRouter.parameters;
-        if (stateParams && stateParams.pokemonId) {
-          const pokemonId = stateParams.pokemonId();
-          const isChecked = stateParams.isChecked();
+        const { pokemonId, isChecked } = this.router.retrieve() || {};
 
+        if (pokemonId) {
           const pokemonData = pokemonList.find(({ id }) => id == pokemonId);
-
           if (pokemonData) {
             const { weight, height, name, types, moves, forms } = pokemonData;
 
-            this.isChecked([isChecked === 'true' ? 'checked' : '']);
+            this.isChecked([isChecked === true ? 'checked' : '']);
             this.types(types);
             this.pokemonId(pokemonId);
 
@@ -81,7 +78,7 @@ define(['knockout', 'ojs/ojarraydataprovider', 'columns', 'ojs/ojknockout', 'ojs
       });
 
       this.onHandleClick = () => {
-        this.router.go('pokemons/');
+        this.router.go('/');
       }
     }
 

@@ -14,11 +14,13 @@ define(['ojs/ojrouter', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils'
       // error
       this.error = ko.observable('');
 
-      this.router = Router.rootInstance;
       Router.defaults['urlAdapter'] = new Router.urlParamAdapter();
+      this.router = Router.rootInstance;
+      var a =  new Router.urlParamAdapter();
+
       this.router.configure({
-        'pokemons': { label: 'Pokemons', value: 'pokemons', isDefault: true },
-        'pokemonDetails/{pokemonId}/{isChecked}': { label: 'Pokemon details', value: 'pokemonDetails' }
+        'pokemons': { value: 'pokemons', isDefault: true },
+        'pokemonDetails': { value: 'pokemonDetails'}
       });
 
       this.moduleConfig = ko.pureComputed(() => {
