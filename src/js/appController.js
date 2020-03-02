@@ -16,8 +16,6 @@ define(['ojs/ojrouter', 'ojs/ojresponsiveutils', 'ojs/ojresponsiveknockoututils'
 
       Router.defaults['urlAdapter'] = new Router.urlParamAdapter();
       this.router = Router.rootInstance;
-      var a =  new Router.urlParamAdapter();
-
       this.router.configure({
         'pokemons': { value: 'pokemons', isDefault: true },
         'pokemonDetails': { value: 'pokemonDetails'}
